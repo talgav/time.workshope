@@ -1,0 +1,78 @@
+---
+title: "Your Document Title"
+author: "Document Author"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+---
+
+upload time examples
+
+
+```{r message=FALSE, warning=FALSE}
+timeSample<-read.csv("timeSample.csv")
+
+library(lubridate)
+library(dplyr)
+library(tidyr)
+
+
+timeSample<-select(timeSample,Date.1,Date.2,DateTime1)
+timeSample<-na.omit(timeSample)
+```
+
+```{r, echo=FALSE, results='asis'}
+
+knitr::kable(timeSample)
+```
+
+
+
+```{r}
+timeSample$Date.1<-dmy(timeSample$Date.1)
+```
+
+```{r}
+timeSample$Date.2<-ymd(timeSample$Date.2)
+```
+
+```{r}
+timeSample$DateTime1<-dmy_hms(timeSample$DateTime1)
+
+```
+
+
+```{r, echo=FALSE, results='asis'}
+
+knitr::kable(timeSample[1:2,])
+
+```
+
+```{r}
+tz(timeSample$DateTime1)
+
+timeSample$DateTime1<-force_tz(timeSample$DateTime1,"Asia/Jerusalem")
+
+tz(timeSample$DateTime1)
+
+timeSample$DateTime_UTC<-with_tz(timeSample$DateTime1, "UTC")
+
+knitr::kable(timeSample[1:2,])
+```
+
+## The best practice is to specify the timezone in first place
+
+```{r}
+ymd_hms("2019-07-20 08:35:00",tz="Asia/Jerusalem")
+```
+
+
+```{r}
+plus.hour<-as.period(1,unit = "hours")
+
+```
+
+
+
